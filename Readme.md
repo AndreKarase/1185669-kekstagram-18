@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей](https://up.htmlacademy.ru/javascript/18/user/1185669).
-* Наставник: `Неизвестно`.
+* Наставник: `Татьяна Алексеева`.
 
 ---
 
