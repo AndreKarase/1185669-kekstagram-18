@@ -14,31 +14,22 @@ var MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-var AUTORS = [{
-  name: 'Артем',
-  avatar: 'img/avatar-1.svg'
-},
-{
-  name: 'Антон',
-  avatar: 'img/avatar-2.svg'
-},
-{
-  name: 'Александр',
-  avatar: 'img/avatar-3.svg'
-},
-{
-  name: 'Ева',
-  avatar: 'img/avatar-4.svg'
-},
-{
-  name: 'Алиса',
-  avatar: 'img/avatar-5.svg'
-},
-{
-  name: 'Кира',
-  avatar: 'img/avatar-6.svg'
-}
+var AUTORS_NAMES = [
+  'Артем',
+  'Антон',
+  'Александр',
+  'Алиса',
+  'Кира',
+  'Ева',
 ];
+
+var autors = [];
+for (var i = 0; i < AUTORS_NAMES.length; i++) {
+  autors[i] = {
+    name: AUTORS_NAMES[i],
+    avatar: 'img/avatar-' + (i + 1) + '.svg'
+  };
+}
 
 var randomData = function (data) {
   var index = Math.floor(Math.random() * data.length);
@@ -47,7 +38,7 @@ var randomData = function (data) {
 
 var createPhotoArray = function () {
   var arr = [];
-  for (var i = 0; i < PHOTOS_NUMBER; i++) {
+  for (i = 0; i < PHOTOS_NUMBER; i++) {
     arr[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       description: 'Описание',
@@ -56,7 +47,7 @@ var createPhotoArray = function () {
     };
 
     for (var j = 0; j < COMMENTS_NUMBER; j++) {
-      var autor = randomData(AUTORS);
+      var autor = randomData(autors);
       arr[i].comments[j] = {
         message: randomData(MESSAGES),
         name: autor.name,
@@ -88,7 +79,7 @@ var renderPhoto = function (photo) {
 var fillBlockPhotos = function (block) {
   var fragment = document.createDocumentFragment(true);
 
-  for (var i = 0; i < photos.length; i++) {
+  for (i = 0; i < photos.length; i++) {
     fragment.appendChild(renderPhoto(photos[i]));
   }
 
