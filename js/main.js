@@ -267,3 +267,36 @@ imgUploadSubmitBtn.addEventListener('click', function () {
 });
 
 commentsInput.maxLength = '140';
+
+var bigPicture = document.querySelector('.big-picture');
+var bigPictureImg = bigPicture.querySelector('.big-picture__img');
+var bigPictureLikes = bigPicture.querySelector('.likes-count');
+var bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
+var bigPictureComments = bigPicture.querySelector('.social__comments');
+var bigPictureComment = bigPicture.querySelector('.social__comment');
+var bigPictureDescription = bigPicture.querySelector('.social__caption');
+
+bigPicture.classList.remove('hidden');
+
+bigPictureImg.lastElementChild.src = photos[0].url;
+bigPictureLikes.textContent = photos[0].likes + '';
+bigPictureCommentsCount.textContent = photos[0].comments.length;
+var commentsClone = bigPictureComments.cloneNode();
+
+for (i = 0; i < photos[0].comments.length; i++) {
+  var commentElement = bigPictureComment.cloneNode(true);
+  var socialPicture = commentElement.querySelector('.social__picture');
+  var socialText = commentElement.querySelector('.social__text');
+
+  socialPicture.src = photos[0].comments[i].avatar;
+  socialPicture.alt = photos[0].comments[i].name;
+  socialText.textContent = photos[0].comments[i].message;
+
+  commentsClone.appendChild(commentElement);
+}
+
+bigPictureComments.replaceWith(commentsClone);
+bigPictureDescription.textContent = photos[0].description;
+
+bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
+bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
