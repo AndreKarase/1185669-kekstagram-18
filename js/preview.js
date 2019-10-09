@@ -8,32 +8,6 @@
   var bigPictureComment = bigPicture.querySelector('.social__comment');
   var bigPictureDescription = bigPicture.querySelector('.social__caption');
 
-  // bigPicture.classList.remove('hidden');
-
-  // bigPictureImg.lastElementChild.src = photos[0].url;
-  // bigPictureLikes.textContent = photos[0].likes + '';
-  // bigPictureCommentsCount.textContent = photos[0].comments.length;
-  // var commentsClone = bigPictureComments.cloneNode();
-
-  // for (var i = 0; i < photos[0].comments.length; i++) {
-  //   var commentElement = bigPictureComment.cloneNode(true);
-  //   var socialPicture = commentElement.querySelector('.social__picture');
-  //   var socialText = commentElement.querySelector('.social__text');
-
-  //   socialPicture.src = photos[0].comments[i].avatar;
-  //   socialPicture.alt = photos[0].comments[i].name;
-  //   socialText.textContent = photos[0].comments[i].message;
-
-  //   commentsClone.appendChild(commentElement);
-  // }
-
-  // bigPictureComments.replaceWith(commentsClone);
-  // bigPictureDescription.textContent = photos[0].description;
-
-  // bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
-  // bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
-  // // ---------------------------------------------------------
-
   var bigPictureEscPressHandler = function (evt) {
     if (evt.keyCode === window.data.ESC_KEYCODE) {
       closeBigPicture();
