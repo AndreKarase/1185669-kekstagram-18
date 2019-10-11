@@ -21,7 +21,7 @@
     }
 
     bigPicture.classList.remove('hidden');
-    var photo = window.data.photos[+element.id];
+    var photo = window.photos[+element.id];
 
     bigPictureImg.lastElementChild.src = photo.url;
     bigPictureLikes.textContent = photo.likes + '';
