@@ -21,6 +21,9 @@
 
   window.fillBlockPhotos = function () {
     picturesBlockElement.innerHTML = beforeRender;
+    var uploadFileInput = document.querySelector('#upload-file');
+    uploadFileInput.addEventListener('change', window.showPopup);
+
     var fragment = document.createDocumentFragment(true);
 
     for (var i = 0; i < window.photos.length; i++) {
@@ -31,4 +34,3 @@
   };
 
 })();
-
