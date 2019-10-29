@@ -17,6 +17,7 @@
   };
 
   var popularPhotos;
+
   var updateGalery = function (evt) {
     switch (evt.target.id) {
       case 'filter-popular':

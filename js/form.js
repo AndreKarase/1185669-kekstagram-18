@@ -12,7 +12,7 @@
     }
   };
 
-  var showPopup = function () {
+  window.showPopup = function () {
     imgUploadOverlay.classList.remove('hidden');
     effectlevelBar.classList.add('hidden');
     document.addEventListener('keydown', escPressHandler);
@@ -25,7 +25,7 @@
   };
 
   uploadFileInput.addEventListener('change', function () {
-    showPopup();
+    window.showPopup();
   });
 
   imgUploadCancel.addEventListener('click', function () {
@@ -42,6 +42,8 @@
   var imgUploadPreview = imgUploadOverlay.querySelector('.img-upload__preview');
   var effectLevelPin = imgUploadOverlay.querySelector('.effect-level__pin');
   var effectlevelBar = imgUploadOverlay.querySelector('.img-upload__effect-level');
+  var effectlevelDepth = imgUploadOverlay.querySelector('.effect-level__depth');
+  var effectLevelValue = imgUploadOverlay.querySelector('.effect-level__value');
   var currentEffect;
 
   var changeEffect = function (evt) {
@@ -52,30 +54,34 @@
     }
     imgUploadPreview.style.filter = '';
     imgUploadPreview.classList.remove('effects__preview--' + currentEffect);
+
     currentEffect = evt.target.value;
     imgUploadPreview.classList.add('effects__preview--' + currentEffect);
+    effectLevelPin.style.left = effectLevelPin.parentElement.offsetWidth + 'px';
+    effectLevelValue.value = '100';
+    effectlevelDepth.style.width = effectLevelValue.value + '%';
   };
 
-  var calculateLevel = function (evt, min, max) {
+  var calculateLevel = function (min, max) {
     var widthLevelLine = effectLevelPin.parentElement.offsetWidth;
-    return min + (max - min) / widthLevelLine * evt.offsetX;
+    return effectLevelPin.offsetLeft / widthLevelLine * (max - min) + min;
   };
 
-  var changeEffectLevel = function (evt) {
+  var changeEffectLevel = function () {
     if (currentEffect === 'chrome') {
-      imgUploadPreview.style.filter = 'grayscale(' + calculateLevel(evt, 0.0, 1.0) + ')';
+      imgUploadPreview.style.filter = 'grayscale(' + calculateLevel(0.0, 1.0) + ')';
     } else
     if (currentEffect === 'sepia') {
-      imgUploadPreview.style.filter = 'sepia(' + calculateLevel(evt, 0.0, 1.0) + ')';
+      imgUploadPreview.style.filter = 'sepia(' + calculateLevel(0.0, 1.0) + ')';
     } else
     if (currentEffect === 'marvin') {
-      imgUploadPreview.style.filter = 'invert(' + calculateLevel(evt, 0.0, 100.0) + '%)';
+      imgUploadPreview.style.filter = 'invert(' + calculateLevel(0.0, 100.0) + '%)';
     } else
     if (currentEffect === 'phobos') {
-      imgUploadPreview.style.filter = 'blur(' + calculateLevel(evt, 0.0, 3.0) + 'px)';
+      imgUploadPreview.style.filter = 'blur(' + calculateLevel(0.0, 3.0) + 'px)';
     } else
     if (currentEffect === 'heat') {
-      imgUploadPreview.style.filter = 'brightness(' + calculateLevel(evt, 1.0, 3.0) + ')';
+      imgUploadPreview.style.filter = 'brightness(' + calculateLevel(1.0, 3.0) + ')';
     }
   };
 
@@ -83,10 +89,36 @@
     changeEffect(evt);
   });
 
-  effectLevelPin.addEventListener('mousedown', function () {
-    effectLevelPin.parentElement.addEventListener('mouseup', function (evt) {
-      changeEffectLevel(evt);
-    });
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var startPos = evt.clientX;
+
+    var mouseMoveHandler = function (moveEvt) {
+      moveEvt.preventDefault();
+      var min = 0;
+      var max = effectLevelPin.parentElement.offsetWidth;
+
+      var shift = moveEvt.clientX - startPos;
+      startPos = moveEvt.clientX;
+
+      if (effectLevelPin.offsetLeft + shift > min &&
+        effectLevelPin.offsetLeft + shift < max) {
+
+        effectLevelPin.style.left = (effectLevelPin.offsetLeft + shift) + 'px';
+        effectLevelValue.value = Math.round(calculateLevel(0.0, 100.0));
+        effectlevelDepth.style.width = effectLevelValue.value + '%';
+        changeEffectLevel();
+      }
+    };
+
+    var mouseUpHandler = function () {
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+
   });
 
   var scaleSmallerBtn = imgUploadOverlay.querySelector('.scale__control--smaller');
@@ -175,20 +207,67 @@
   });
 
   commentsInput.maxLength = '140';
+  var imgUploadForm = document.querySelector('.img-upload__form');
+
+  var showMessage = function (messageElement) {
+    closePopup();
+    scaleValue.value = '100%';
+    effectsList.querySelector('#effect-none').checked = true;
+    effectLevelValue = '100';
+    imgUploadPreview.style.filter = '';
+    imgUploadPreview.classList.remove('effects__preview--' + currentEffect);
+    imgUploadPreview.classList.add('effects__preview--none');
+    effectLevelPin.style.left = effectLevelPin.parentElement.offsetWidth + 'px';
+    hashtagsInput = '';
+    commentsInput = '';
+    document.querySelector('main').appendChild(messageElement);
+
+    var messageEscPressHandler = function (evt) {
+      if (evt.keyCode === window.data.ESC_KEYCODE) {
+        closeMessage();
+      }
+    };
+
+    var outOfClickHandler = function (evt) {
+      if (evt.target === messageElement) {
+        closeMessage();
+      }
+    };
+
+    var closeMessage = function () {
+      messageElement.remove();
+      document.removeEventListener('keydown', messageEscPressHandler);
+    };
+
+    var buttons = messageElement.querySelectorAll('button');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        closeMessage();
+      });
+    });
+
+    document.addEventListener('keydown', messageEscPressHandler);
+    messageElement.addEventListener('click', outOfClickHandler);
+
+  };
+
+  var successHandler = function () {
+    showMessage(successMessage);
+  };
+
+  var errorHandler = function () {
+    showMessage(errorMessage);
+  };
+
+  imgUploadForm.addEventListener('submit', function (evt) {
+    window.server.transmit(new FormData(imgUploadForm), successHandler, errorHandler);
+    evt.preventDefault();
+  });
 
   var errorMessage = document.querySelector('#error')
     .content.querySelector('.error');
 
   var successMessage = document.querySelector('#success')
     .content.querySelector('.success');
-
-  imgUploadSubmitBtn.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    if (commentsInput.validity.valid) {
-      imgUploadSubmitBtn.after(successMessage);
-    } else {
-      imgUploadSubmitBtn.after(errorMessage);
-    }
-  });
 
 })();

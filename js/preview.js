@@ -27,25 +27,43 @@
     bigPictureLikes.textContent = photo.likes + '';
     bigPictureCommentsCount.textContent = photo.comments.length;
     var bigPictureComments = bigPicture.querySelector('.social__comments');
+    var commentsLoader = bigPicture.querySelector('.comments-loader');
     var commentsClone = bigPictureComments.cloneNode();
+    var visionComments = 0;
 
-    for (var i = 0; i < photo.comments.length; i++) {
-      var commentElement = bigPictureComment.cloneNode(true);
-      var socialPicture = commentElement.querySelector('.social__picture');
-      var socialText = commentElement.querySelector('.social__text');
+    var loadComments = function () {
+      commentsLoader.classList.remove('visually-hidden');
+      visionComments += 5;
 
-      socialPicture.src = photo.comments[i].avatar;
-      socialPicture.alt = photo.comments[i].name;
-      socialText.textContent = photo.comments[i].message;
+      var socialCommentCount = bigPicture.querySelector('.social__comment-count');
+      socialCommentCount.textContent = Math.min(visionComments, photo.comments.length) +
+      ' из ' + photo.comments.length + ' комментариев';
 
-      commentsClone.appendChild(commentElement);
-    }
+      for (var i = visionComments - 5; i < visionComments && i < photo.comments.length; i++) {
+        if (i === photo.comments.length - 1) {
+          commentsLoader.classList.add('visually-hidden');
+        }
+
+        var commentElement = bigPictureComment.cloneNode(true);
+        var socialPicture = commentElement.querySelector('.social__picture');
+        var socialText = commentElement.querySelector('.social__text');
+
+        socialPicture.src = photo.comments[i].avatar;
+        socialPicture.alt = photo.comments[i].name;
+        socialText.textContent = photo.comments[i].message;
+
+        commentsClone.appendChild(commentElement);
+      }
+    };
+
+    loadComments();
+    commentsLoader.addEventListener('click', loadComments);
 
     bigPictureComments.replaceWith(commentsClone);
     bigPictureDescription.textContent = photo.description;
 
-    bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
-    bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
+    // bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
+    // bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
 
     document.addEventListener('keydown', bigPictureEscPressHandler);
   };
