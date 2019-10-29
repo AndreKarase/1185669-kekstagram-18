@@ -207,23 +207,67 @@
   });
 
   commentsInput.maxLength = '140';
-  var y = document.querySelector('#upload-select-image');
-  y.action = 'https://js.dump.academy/kekstagram';
+  var imgUploadForm = document.querySelector('.img-upload__form');
+
+  var showMessage = function (messageElement) {
+    closePopup();
+    scaleValue.value = '100%';
+    effectsList.querySelector('#effect-none').checked = true;
+    effectLevelValue = '100';
+    imgUploadPreview.style.filter = '';
+    imgUploadPreview.classList.remove('effects__preview--' + currentEffect);
+    imgUploadPreview.classList.add('effects__preview--none');
+    effectLevelPin.style.left = effectLevelPin.parentElement.offsetWidth + 'px';
+    hashtagsInput = '';
+    commentsInput = '';
+    document.querySelector('main').appendChild(messageElement);
+
+    var messageEscPressHandler = function (evt) {
+      if (evt.keyCode === window.data.ESC_KEYCODE) {
+        closeMessage();
+      }
+    };
+
+    var outOfClickHandler = function (evt) {
+      if (evt.target === messageElement) {
+        closeMessage();
+      }
+    };
+
+    var closeMessage = function () {
+      messageElement.remove();
+      document.removeEventListener('keydown', messageEscPressHandler);
+    };
+
+    var buttons = messageElement.querySelectorAll('button');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        closeMessage();
+      });
+    });
+
+    document.addEventListener('keydown', messageEscPressHandler);
+    messageElement.addEventListener('click', outOfClickHandler);
+
+  };
+
+  var successHandler = function () {
+    showMessage(successMessage);
+  };
+
+  var errorHandler = function () {
+    showMessage(errorMessage);
+  };
+
+  imgUploadForm.addEventListener('submit', function (evt) {
+    window.server.transmit(new FormData(imgUploadForm), successHandler, errorHandler);
+    evt.preventDefault();
+  });
 
   var errorMessage = document.querySelector('#error')
     .content.querySelector('.error');
 
   var successMessage = document.querySelector('#success')
     .content.querySelector('.success');
-
-  imgUploadSubmitBtn.addEventListener('click', function (evt) {
-
-    if (commentsInput.validity.valid) {
-      imgUploadSubmitBtn.after(successMessage);
-    } else {
-      evt.preventDefault();
-      imgUploadSubmitBtn.after(errorMessage);
-    }
-  });
 
 })();

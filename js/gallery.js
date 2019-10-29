@@ -2,7 +2,7 @@
 
 (function () {
   var picturesBlockElement = document.querySelector('.pictures');
-  var beforeRender = picturesBlockElement.innerHTML;
+  // var beforeRender = picturesBlockElement.children;
   var pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
@@ -20,9 +20,9 @@
   };
 
   window.fillBlockPhotos = function () {
-    picturesBlockElement.innerHTML = beforeRender;
-    var uploadFileInput = document.querySelector('#upload-file');
-    uploadFileInput.addEventListener('change', window.showPopup);
+
+    // var uploadFileInput = document.querySelector('#upload-file');
+    // uploadFileInput.addEventListener('change', window.showPopup);
 
     var fragment = document.createDocumentFragment(true);
 
