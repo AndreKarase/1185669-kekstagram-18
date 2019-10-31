@@ -2,7 +2,7 @@
 
 (function () {
   var picturesBlockElement = document.querySelector('.pictures');
-  // var beforeRender = picturesBlockElement.children;
+  var initialElements = [].slice.call(picturesBlockElement.children);
   var pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
@@ -20,11 +20,12 @@
   };
 
   window.fillBlockPhotos = function () {
+    picturesBlockElement.innerHTML = '';
+    var fragment = document.createDocumentFragment();
 
-    // var uploadFileInput = document.querySelector('#upload-file');
-    // uploadFileInput.addEventListener('change', window.showPopup);
-
-    var fragment = document.createDocumentFragment(true);
+    initialElements.forEach(function (element) {
+      fragment.appendChild(element);
+    });
 
     for (var i = 0; i < window.photos.length; i++) {
       fragment.appendChild(renderPhoto(window.photos[i], i));

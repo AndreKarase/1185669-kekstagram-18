@@ -47,6 +47,14 @@
     }
   };
 
+  var activeButton = imgFilters.querySelector('#filter-popular');
+
+  imgFilters.addEventListener('click', function (evt) {
+    activeButton.classList.remove('img-filters__button--active');
+    activeButton = evt.target;
+    activeButton.classList.add('img-filters__button--active');
+  });
+
   imgFilters.addEventListener('click', window.debounce(function (evt) {
     updateGalery(evt);
   }));
