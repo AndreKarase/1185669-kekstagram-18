@@ -48,6 +48,7 @@
   var hashtagsInput = imgUploadOverlay.querySelector('.text__hashtags');
   var commentsInput = imgUploadOverlay.querySelector('.text__description');
 
+
   var showMessage = function (messageElement) {
     closePopup();
     scaleValue.value = '100%';
