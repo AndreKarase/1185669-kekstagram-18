@@ -12,7 +12,6 @@
 
     photoElement.id = index + '';
     photoElement.querySelector('.picture__img').src = photo.url;
-    photoElement.querySelector('.picture__info').insertAdjacentText('afterbegin', photo.description);
     photoElement.querySelector('.picture__likes').textContent = photo.likes + '';
     photoElement.querySelector('.picture__comments').textContent = photo.comments.length + '';
 
@@ -27,9 +26,9 @@
       fragment.appendChild(element);
     });
 
-    for (var i = 0; i < window.photos.length; i++) {
-      fragment.appendChild(renderPhoto(window.photos[i], i));
-    }
+    window.photos.forEach(function (photo, index) {
+      fragment.appendChild(renderPhoto(photo, index));
+    });
 
     picturesBlockElement.appendChild(fragment);
   };

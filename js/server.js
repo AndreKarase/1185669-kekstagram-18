@@ -3,14 +3,17 @@
 (function () {
   var RECEIVE_URL = 'https://js.dump.academy/kekstagram/data';
   var TRANSMIT_URL = 'https://js.dump.academy/kekstagram';
+  var TIMEOUT = 10000;
+  var OK = 200;
 
   window.server = {
+
     receive: function (successHandler, errorHandler) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
+        if (xhr.status === OK) {
           successHandler(xhr.response);
         } else {
           errorHandler('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -25,7 +28,7 @@
         errorHandler('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
       });
 
-      xhr.timeout = 10000;
+      xhr.timeout = TIMEOUT;
 
       xhr.open('GET', RECEIVE_URL);
       xhr.send();
@@ -36,7 +39,7 @@
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
+        if (xhr.status === OK) {
           successHandler();
         } else {
           errorHandler();

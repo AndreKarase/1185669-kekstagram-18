@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var ADD = 5;
+
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureImg = bigPicture.querySelector('.big-picture__img');
   var bigPictureLikes = bigPicture.querySelector('.likes-count');
@@ -33,13 +35,13 @@
 
     var loadComments = function () {
       commentsLoader.classList.remove('visually-hidden');
-      visionComments += 5;
+      visionComments += ADD;
 
       var socialCommentCount = bigPicture.querySelector('.social__comment-count');
       socialCommentCount.textContent = Math.min(visionComments, photo.comments.length) +
       ' из ' + photo.comments.length + ' комментариев';
 
-      for (var i = visionComments - 5; i < visionComments && i < photo.comments.length; i++) {
+      for (var i = visionComments - ADD; i < visionComments && i < photo.comments.length; i++) {
         if (i === photo.comments.length - 1) {
           commentsLoader.classList.add('visually-hidden');
         }

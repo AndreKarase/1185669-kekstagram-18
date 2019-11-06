@@ -1,19 +1,21 @@
 'use strict';
 
 (function () {
+  var RANDOM_PHOTOS_NUMBER = 10;
+
   var imgFilters = document.querySelector('.img-filters');
 
   var getRandomData = function (array, number) {
     var arrayCopy = array.slice();
-    var result = [];
+    var randomItems = [];
 
     for (var i = 0; i < number; i++) {
       var index = Math.floor(Math.random() * arrayCopy.length);
-      result.push(arrayCopy[index]);
+      randomItems.push(arrayCopy[index]);
       arrayCopy.splice(index, 1);
     }
 
-    return result;
+    return randomItems;
   };
 
   var popularPhotos;
@@ -26,7 +28,7 @@
         break;
 
       case 'filter-random':
-        window.photos = getRandomData(popularPhotos, 10);
+        window.photos = getRandomData(popularPhotos, RANDOM_PHOTOS_NUMBER);
         window.fillBlockPhotos();
         break;
 

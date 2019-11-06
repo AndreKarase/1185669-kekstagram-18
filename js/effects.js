@@ -1,6 +1,20 @@
 'use strict';
 
 (function () {
+  var GRAYSCALE_MIN = 0.0;
+  var GRAYSCALE_MAX = 1.0;
+  var SEPIA_MIN = 0.0;
+  var SEPIA_MAX = 1.0;
+  var INVERT_MIN = 0.0;
+  var INVERT_MAX = 100.0;
+  var BLUR_MIN = 0.0;
+  var BLUR_MAX = 3.0;
+  var BRIGHTNESS_MIN = 1.0;
+  var BRIGHTNESS_MAX = 3.0;
+  var PIN_OFFSET_MIN = 0;
+  var EFFECT_VALUE_MIN = 0.0;
+  var EFFECT_VALUE_MAX = 100.0;
+
   var imgUploadOverlay = document.querySelector('.img-upload__overlay');
   var effectsList = imgUploadOverlay.querySelector('.effects__list');
   var imgUploadPreview = imgUploadOverlay.querySelector('.img-upload__preview');
@@ -32,19 +46,19 @@
 
   var changeEffectLevel = function () {
     if (window.currentEffect === 'chrome') {
-      imgUploadPreview.style.filter = 'grayscale(' + calculateLevel(0.0, 1.0) + ')';
+      imgUploadPreview.style.filter = 'grayscale(' + calculateLevel(GRAYSCALE_MIN, GRAYSCALE_MAX) + ')';
     } else
     if (window.currentEffect === 'sepia') {
-      imgUploadPreview.style.filter = 'sepia(' + calculateLevel(0.0, 1.0) + ')';
+      imgUploadPreview.style.filter = 'sepia(' + calculateLevel(SEPIA_MIN, SEPIA_MAX) + ')';
     } else
     if (window.currentEffect === 'marvin') {
-      imgUploadPreview.style.filter = 'invert(' + calculateLevel(0.0, 100.0) + '%)';
+      imgUploadPreview.style.filter = 'invert(' + calculateLevel(INVERT_MIN, INVERT_MAX) + '%)';
     } else
     if (window.currentEffect === 'phobos') {
-      imgUploadPreview.style.filter = 'blur(' + calculateLevel(0.0, 3.0) + 'px)';
+      imgUploadPreview.style.filter = 'blur(' + calculateLevel(BLUR_MIN, BLUR_MAX) + 'px)';
     } else
     if (window.currentEffect === 'heat') {
-      imgUploadPreview.style.filter = 'brightness(' + calculateLevel(1.0, 3.0) + ')';
+      imgUploadPreview.style.filter = 'brightness(' + calculateLevel(BRIGHTNESS_MIN, BRIGHTNESS_MAX) + ')';
     }
   };
 
@@ -58,7 +72,7 @@
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
-      var min = 0;
+      var min = PIN_OFFSET_MIN;
       var max = effectLevelPin.parentElement.offsetWidth;
 
       var shift = moveEvt.clientX - startPos;
@@ -68,7 +82,7 @@
         effectLevelPin.offsetLeft + shift < max) {
 
         effectLevelPin.style.left = (effectLevelPin.offsetLeft + shift) + 'px';
-        effectLevelValue.value = Math.round(calculateLevel(0.0, 100.0));
+        effectLevelValue.value = Math.round(calculateLevel(EFFECT_VALUE_MIN, EFFECT_VALUE_MAX));
         effectlevelDepth.style.width = effectLevelValue.value + '%';
         changeEffectLevel();
       }
